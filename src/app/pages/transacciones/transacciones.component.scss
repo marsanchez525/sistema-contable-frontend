@@ -1,0 +1,217 @@
+/* FONDO GENERAL DE LA PÁGINA */
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f3f6fb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  position: relative;
+}
+
+/* TÍTULO */
+.container h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: #1f2933;
+}
+
+/* BOTÓN “NUEVA TRANSACCIÓN” ARRIBA A LA DERECHA */
+.container > .btn-primary:first-of-type {
+  position: absolute;
+  right: 24px;
+  top: 32px;
+}
+
+/* TABLA COMO TARJETA */
+table {
+  width: 100%;
+  margin-top: 32px;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+thead {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+th,
+td {
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+th {
+  font-weight: 500;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+tbody tr:hover {
+  background: #eef2ff;
+}
+
+/* PÍLDORAS PARA TIPO (INGRESO / EGRESO) */
+.ingreso,
+.egreso {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ingreso {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.egreso {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+/* BOTONES GENERALES */
+.btn-primary,
+.btn-edit,
+.btn-delete,
+.btn-secondary {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
+}
+
+.btn-edit {
+  background: #fbbf24;
+  color: #1f2933;
+  margin-right: 6px;
+}
+
+.btn-edit:hover {
+  background: #f59e0b;
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+}
+
+/* MODAL OSCURECE FONDO */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+/* CONTENIDO DEL MODAL (TARJETA) */
+.modal-content {
+  background: #ffffff;
+  width: 540px;
+  max-width: 90%;
+  padding: 24px 28px 20px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.35);
+}
+
+/* TÍTULO DEL MODAL */
+.modal-content h3 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* FORMULARIO DEL MODAL */
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+
+/* CAMPOS QUE OCUPAN TODO EL ANCHO */
+form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+input[type='text'],
+input[type='number'],
+input[type='date'],
+select {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 7px 10px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background: #f9fafb;
+}
+
+input:focus,
+select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+  background: #ffffff;
+}
+
+/* DESCRIPCIÓN Y FECHA+TIPO A LO ANCHO */
+input[name='descripcion'] {
+  grid-column: 1 / -1;
+}
+
+/* BOTONES DEL MODAL */
+.modal-buttons {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}

@@ -1,0 +1,123 @@
+<div class="proveedores-page">
+
+  <div class="page-header">
+    <div>
+      <h2>Proveedores</h2>
+      <p>Administra los proveedores del sistema contable.</p>
+    </div>
+    <button class="btn-primary" (click)="openModal()">
+      + Nuevo proveedor
+    </button>
+  </div>
+
+  <div *ngIf="errorMsg" class="error-box">
+    {{ errorMsg }}
+  </div>
+
+  <div *ngIf="loading">Cargando proveedores...</div>
+
+  <div *ngIf="!loading && proveedores.length === 0 && !errorMsg" class="no-data">
+    No hay proveedores registrados.
+  </div>
+
+  <div class="table-wrapper" *ngIf="!loading && proveedores.length > 0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>NIT</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th class="text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of proveedores">
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.nit }}</td>
+          <td>{{ p.direccion }}</td>
+          <td>{{ p.telefono }}</td>
+          <td>{{ p.correo }}</td>
+          <td class="text-right">
+            <button class="btn-ghost" (click)="openModal(p)">Editar</button>
+            <button class="btn-danger" (click)="deleteProveedor(p.id_proveedor)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3>{{ proveedorForm.id_proveedor ? 'Editar proveedor' : 'Nuevo proveedor' }}</h3>
+      <button class="modal-close" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <form autocomplete="off">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input
+              type="text"
+              [(ngModel)]="proveedorForm.nombre"
+              name="nombre"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>NIT</label>
+            <input
+              type="text"
+              [(ngModel)]="proveedorForm.nit"
+              name="nit"
+              required
+            />
+          </div>
+
+          <div class="form-group form-group-full">
+            <label>Dirección</label>
+            <input
+              type="text"
+              [(ngModel)]="proveedorForm.direccion"
+              name="direccion"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input
+              type="text"
+              [(ngModel)]="proveedorForm.telefono"
+              name="telefono"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Correo</label>
+            <input
+              type="email"
+              [(ngModel)]="proveedorForm.correo"
+              name="correo"
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="closeModal()">
+            Cancelar
+          </button>
+          <button type="button" class="btn-primary" (click)="saveProveedor()">
+            {{ proveedorForm.id_proveedor ? 'Guardar cambios' : 'Crear proveedor' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

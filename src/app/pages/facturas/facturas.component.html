@@ -1,0 +1,160 @@
+<div class="facturas-page">
+
+  <!-- ENCABEZADO -->
+  <div class="page-header">
+    <div>
+      <h2>Gestión de Facturas</h2>
+      <p>Administra clientes, proveedores y facturas registradas</p>
+    </div>
+
+    <button class="btn-primary" (click)="openModal()">+ Nueva factura</button>
+  </div>
+
+  <!-- MENSAJE DE ERROR -->
+  <div class="error-box" *ngIf="errorMsg">
+    {{ errorMsg }}
+  </div>
+
+  <!-- TABLA -->
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Proveedor</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th class="text-right">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let f of facturas">
+          <td>{{ f.id_factura }}</td>
+
+          <td>
+            {{ f.cliente?.Nombre1_Cliente || f.cliente?.nombre || 'Cliente ' + f.id_cliente }}
+          </td>
+
+          <td>
+            {{ f.proveedor?.nombre || ('Proveedor ' + f.id_proveedor) }}
+          </td>
+
+          <td>{{ f.fecha_emision }}</td>
+
+          <td>${{ f.total | number:'1.0-0' }}</td>
+
+          <td>{{ f.estado }}</td>
+
+          <td class="text-right">
+            <button class="btn-ghost" (click)="openModal(f)">Editar</button>
+            <button class="btn-danger" (click)="deleteFactura(f.id_factura)">Eliminar</button>
+            <button class="btn-outline" (click)="exportPdf(f.id_factura)">PDF</button>
+            <button class="btn-outline" (click)="exportExcel(f.id_factura)">Excel</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="no-data" *ngIf="facturas.length === 0">
+    No hay facturas registradas.
+  </p>
+</div>
+
+
+
+<!-- ========================================================= -->
+<!-- ======================= MODAL =========================== -->
+<!-- ========================================================= -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal-dialog">
+
+    <!-- HEADER -->
+    <div class="modal-header">
+      <h3>{{ facturaForm.id_factura ? 'Editar factura' : 'Nueva factura' }}</h3>
+      <button class="modal-close" (click)="closeModal()">×</button>
+    </div>
+
+    <!-- BODY -->
+    <div class="modal-body">
+      <form autocomplete="off">
+
+        <div class="form-grid">
+
+          <!-- CLIENTE -->
+          <div class="form-group">
+            <label>Cliente</label>
+            <select [(ngModel)]="facturaForm.id_cliente" name="id_cliente" required>
+              <option [ngValue]="null">Seleccione cliente...</option>
+
+              <option *ngFor="let c of clientes" [ngValue]="c.id ?? c.id_cliente">
+                {{ c.Nombre1_Cliente || c.nombre || ('Cliente ' + (c.id ?? c.id_cliente)) }}
+              </option>
+            </select>
+          </div>
+
+          <!-- PROVEEDOR -->
+          <div class="form-group">
+            <label>Proveedor</label>
+            <select [(ngModel)]="facturaForm.id_proveedor" name="id_proveedor" required>
+              <option [ngValue]="null">Seleccione proveedor...</option>
+
+              <option *ngFor="let p of proveedores" [ngValue]="p.id_proveedor ?? p.id">
+                {{ p.nombre || ('Proveedor ' + (p.id_proveedor ?? p.id)) }}
+              </option>
+            </select>
+          </div>
+
+          <!-- FECHA -->
+          <div class="form-group">
+            <label>Fecha de emisión</label>
+            <input 
+              type="date" 
+              [(ngModel)]="facturaForm.fecha_emision" 
+              name="fecha_emision" 
+              required 
+            />
+          </div>
+
+          <!-- TOTAL -->
+          <div class="form-group">
+            <label>Total</label>
+            <input 
+              type="number"
+              step="0.01"
+              [(ngModel)]="facturaForm.total"
+              name="total"
+              required
+            />
+          </div>
+
+          <!-- ESTADO -->
+          <div class="form-group form-group-full">
+            <label>Estado</label>
+            <input
+              type="text"
+              [(ngModel)]="facturaForm.estado"
+              name="estado"
+              placeholder="Ej: Pagada, Pendiente, Anulada"
+            />
+          </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+
+          <button type="button" class="btn-primary" (click)="saveFactura()">
+            {{ facturaForm.id_factura ? 'Guardar cambios' : 'Crear factura' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

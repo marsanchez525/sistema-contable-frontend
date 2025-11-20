@@ -1,0 +1,196 @@
+/* CONTENEDOR GENERAL */
+.clientes-page {
+  min-height: 100vh;
+  padding: 2rem 3rem;
+  background: #f4f6fb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #111827;
+}
+
+/* TÍTULO */
+.clientes-page h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.clientes-page > .btn-primary {
+  margin-bottom: 1rem;
+}
+
+/* BOTONES */
+button {
+  font-family: inherit;
+}
+
+.btn-primary {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 25px rgba(37, 99, 235, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  }
+}
+
+.btn-secondary {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: #e5e7eb;
+  color: #111827;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #d1d5db;
+  }
+}
+
+/* TABLA */
+.table {
+  width: 100%;
+  margin-top: 0.75rem;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+
+  thead {
+    background: #f9fafb;
+  }
+
+  th,
+  td {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+  }
+
+  th {
+    font-weight: 600;
+    color: #4b5563;
+  }
+
+  tbody tr:hover {
+    background: #f3f4ff;
+  }
+
+  td:last-child {
+    white-space: nowrap;
+
+    button {
+      margin-right: 0.35rem;
+      padding-inline: 0.7rem;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* MENSAJE SIN DATOS */
+.clientes-page > div {
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+/* MODAL */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem 1.75rem 1.25rem;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.4);
+  animation: modalIn 0.18s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #4b5563;
+    margin-top: 0.35rem;
+    margin-bottom: 0.15rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+    }
+  }
+
+  > div:last-child {
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}
+
+/* ANIMACIÓN MODAL */
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .clientes-page {
+    padding: 1.25rem;
+  }
+
+  .modal-dialog {
+    margin: 0 1rem;
+  }
+}

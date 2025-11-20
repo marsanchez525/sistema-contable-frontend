@@ -1,0 +1,65 @@
+<div class="dashboard">
+
+  <!-- CABECERA -->
+  <header class="dashboard__header">
+    <h1>Sistema Contable</h1>
+    <p class="dashboard__subtitle">
+      Resumen general de clientes, cuentas, facturas y transacciones
+    </p>
+  </header>
+
+  <!-- TARJETAS DE MÉTRICAS -->
+  <section class="dashboard__cards">
+    <div class="card">
+      <span class="card__label">Clientes</span>
+      <span class="card__value">{{ totalClientes }}</span>
+    </div>
+
+    <div class="card">
+      <span class="card__label">Cuentas</span>
+      <span class="card__value">{{ totalCuentas }}</span>
+    </div>
+
+    <div class="card">
+      <span class="card__label">Facturas</span>
+      <span class="card__value">{{ totalFacturas }}</span>
+    </div>
+
+    <div class="card">
+      <span class="card__label">Transacciones</span>
+      <span class="card__value">{{ totalTransacciones }}</span>
+    </div>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL: GRÁFICAS -->
+  <section class="dashboard__content">
+    <div class="panel">
+      <div class="panel__header">
+        <h2>Ingresos Mensuales</h2>
+        <span class="panel__hint">Basado en las facturas registradas</span>
+      </div>
+      <div class="panel__body">
+        <canvas
+          baseChart
+          [data]="ingresosChartData"
+          [type]="ingresosChartType">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel__header">
+        <h2>Movimientos por Cuenta</h2>
+        <span class="panel__hint">Cantidad de transacciones por cuenta contable</span>
+      </div>
+      <div class="panel__body">
+        <canvas
+          baseChart
+          [data]="movimientosChartData"
+          [type]="movimientosChartType">
+        </canvas>
+      </div>
+    </div>
+  </section>
+
+</div>

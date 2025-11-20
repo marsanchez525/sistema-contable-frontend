@@ -1,0 +1,114 @@
+<div class="usuarios-page">
+
+  <div class="page-header">
+    <div>
+      <h2>Usuarios</h2>
+      <p>Administra los usuarios del sistema contable.</p>
+    </div>
+    <button class="btn-primary" (click)="openModal()">
+      + Nuevo usuario
+    </button>
+  </div>
+
+  <div *ngIf="errorMsg" class="error-box">
+    {{ errorMsg }}
+  </div>
+
+  <div *ngIf="loading">Cargando usuarios...</div>
+
+  <div *ngIf="!loading && usuarios.length === 0 && !errorMsg" class="no-data">
+    No hay usuarios registrados.
+  </div>
+
+  <div class="table-wrapper" *ngIf="!loading && usuarios.length > 0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th class="text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuarios">
+          <td>{{ u.nombre }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.rol }}</td>
+          <td>{{ u.estado }}</td>
+          <td class="text-right">
+            <button class="btn-ghost" (click)="openModal(u)">Editar</button>
+            <button class="btn-danger" (click)="deleteUsuario(u.id_usuario)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3>{{ usuarioForm.id_usuario ? 'Editar usuario' : 'Nuevo usuario' }}</h3>
+      <button class="modal-close" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <form autocomplete="off">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input
+              type="text"
+              [(ngModel)]="usuarioForm.nombre"
+              name="nombre"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Correo</label>
+            <input
+              type="email"
+              [(ngModel)]="usuarioForm.email"
+              name="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Rol</label>
+            <input
+              type="text"
+              [(ngModel)]="usuarioForm.rol"
+              name="rol"
+              placeholder="Ej: admin, empleado..."
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Estado</label>
+            <input
+              type="text"
+              [(ngModel)]="usuarioForm.estado"
+              name="estado"
+              placeholder="Activo / Inactivo"
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="closeModal()">
+            Cancelar
+          </button>
+          <button type="button" class="btn-primary" (click)="saveUsuario()">
+            {{ usuarioForm.id_usuario ? 'Guardar cambios' : 'Crear usuario' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

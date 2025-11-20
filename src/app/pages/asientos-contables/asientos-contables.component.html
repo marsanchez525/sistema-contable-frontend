@@ -1,0 +1,52 @@
+<h2>Asientos Contables</h2>
+
+<button (click)="openModal()">Nuevo Asiento</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Fecha</th>
+      <th>Descripción</th>
+      <th>Debe</th>
+      <th>Haber</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let a of asientos">
+      <td>{{ a.id }}</td>
+      <td>{{ a.Fecha_Asiento }}</td>
+      <td>{{ a.Descripcion_Asiento }}</td>
+      <td>{{ a.Debe }}</td>
+      <td>{{ a.Haber }}</td>
+      <td>
+        <button (click)="openModal(a)">Editar</button>
+        <button (click)="deleteAsiento(a.id)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- MODAL -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+    <h3>{{ asientoForm.id ? 'Editar Asiento' : 'Nuevo Asiento' }}</h3>
+
+    <label>Fecha</label>
+    <input type="date" [(ngModel)]="asientoForm.Fecha_Asiento">
+
+    <label>Descripción</label>
+    <input type="text" [(ngModel)]="asientoForm.Descripcion_Asiento">
+
+    <label>Debe</label>
+    <input type="number" [(ngModel)]="asientoForm.Debe">
+
+    <label>Haber</label>
+    <input type="number" [(ngModel)]="asientoForm.Haber">
+
+    <button (click)="saveAsiento()">Guardar</button>
+    <button (click)="showModal = false">Cancelar</button>
+  </div>
+</div>

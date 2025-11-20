@@ -1,0 +1,67 @@
+<div class="clientes-page">
+
+  <h2>Clientes</h2>
+
+  <button class="btn-primary" (click)="openModal()">+ Nuevo cliente</button>
+
+  <div *ngIf="loading">Cargando clientes...</div>
+
+  <div *ngIf="!loading && clientes.length === 0">
+    No hay clientes registrados.
+  </div>
+
+  <table *ngIf="!loading && clientes.length > 0" class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>NIT</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+        <th>Dirección</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of clientes">
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.nit }}</td>
+        <td>{{ c.telefono }}</td>
+        <td>{{ c.correo }}</td>
+        <td>{{ c.direccion }}</td>
+        <td>
+          <button (click)="openModal(c)">Editar</button>
+          <button (click)="deleteCliente(c.id_cliente)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- MODAL SIMPLE -->
+<div *ngIf="showModal" class="modal-backdrop">
+  <div class="modal-dialog">
+    <h3>{{ clienteForm.id_cliente ? 'Editar Cliente' : 'Nuevo Cliente' }}</h3>
+
+    <label>Nombre completo</label>
+    <input type="text" [(ngModel)]="clienteForm.nombre" name="nombre">
+
+    <label>NIT / Documento</label>
+    <input type="text" [(ngModel)]="clienteForm.nit" name="nit">
+
+    <label>Teléfono</label>
+    <input type="text" [(ngModel)]="clienteForm.telefono" name="telefono">
+
+    <label>Correo</label>
+    <input type="email" [(ngModel)]="clienteForm.correo" name="correo">
+
+    <label>Dirección</label>
+    <input type="text" [(ngModel)]="clienteForm.direccion" name="direccion">
+
+    <div>
+      <button (click)="saveCliente()">Guardar</button>
+      <button (click)="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>

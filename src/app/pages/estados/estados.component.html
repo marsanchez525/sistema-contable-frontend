@@ -1,0 +1,48 @@
+<div class="container">
+
+  <h2>Estados</h2>
+
+  <button class="btn-primary" (click)="openModal()">+ Nuevo Estado</button>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let e of estados">
+        <td>{{ e.id_estado ?? e.id }}</td>
+        <td>{{ e.nombre ?? e.Nombre }}</td>
+        <td>
+          <button class="btn-edit" (click)="openModal(e)">Editar</button>
+          <button class="btn-delete" (click)="delete(e.id_estado ?? e.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-card">
+    <h3>{{ estadoForm.id_estado ? 'Editar Estado' : 'Nuevo Estado' }}</h3>
+
+    <form (ngSubmit)="save()">
+      <label>Nombre del Estado</label>
+      <input type="text" [(ngModel)]="estadoForm.nombre" name="nombre" required>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary">{{ estadoForm.id_estado ? 'Actualizar' : 'Crear' }}</button>
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+      </div>
+    </form>
+
+  </div>
+</div>

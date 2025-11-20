@@ -1,0 +1,102 @@
+<div class="container">
+  <h2>Gestión de Transacciones</h2>
+
+  <button class="btn-primary" (click)="openModal()">+ Nueva Transacción</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Cuenta</th>
+        <th>Cliente</th>
+        <th>Proveedor</th>
+        <th>Descripción</th>
+        <th>Monto</th>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let t of transacciones">
+        <td>{{ t.id_cuenta }}</td>
+        <td>{{ t.id_cliente }}</td>
+        <td>{{ t.id_proveedor }}</td>
+        <td>{{ t.descripcion }}</td>
+        <td>$ {{ t.monto }}</td>
+        <td>{{ t.fecha }}</td>
+        <td><span [class.ingreso]="t.tipo=='ingreso'" [class.egreso]="t.tipo=='egreso'">{{ t.tipo }}</span></td>
+
+        <td>
+          <button class="btn-edit" (click)="openModal(t)">Editar</button>
+          <button class="btn-delete" (click)="delete(t.id_transaccion)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- MODAL -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+
+    <h3>{{ transaccionForm.id_transaccion ? 'Editar Transacción' : 'Nueva Transacción' }}</h3>
+
+    <form>
+
+      <!-- CUENTA -->
+      <label>Cuenta Contable</label>
+      <select [(ngModel)]="transaccionForm.id_cuenta" name="id_cuenta" required>
+        <option [ngValue]="null">Seleccione cuenta...</option>
+        <option *ngFor="let c of cuentas" [ngValue]="c.id_cuenta">
+          {{ c.codigo }} - {{ c.nombre }}
+        </option>
+      </select>
+
+      <!-- CLIENTE -->
+      <label>Cliente</label>
+      <select [(ngModel)]="transaccionForm.id_cliente" name="id_cliente">
+        <option [ngValue]="null">Seleccione cliente...</option>
+        <option *ngFor="let c of clientes" [ngValue]="c.id">
+          {{ c.Nombre1_Cliente }}
+        </option>
+      </select>
+
+      <!-- PROVEEDOR -->
+      <label>Proveedor</label>
+      <select [(ngModel)]="transaccionForm.id_proveedor" name="id_proveedor">
+        <option [ngValue]="null">Seleccione proveedor...</option>
+        <option *ngFor="let p of proveedores" [ngValue]="p.id_proveedor">
+          {{ p.nombre }}
+        </option>
+      </select>
+
+      <!-- DESCRIPCIÓN -->
+      <label>Descripción</label>
+      <input type="text" [(ngModel)]="transaccionForm.descripcion" name="descripcion">
+
+      <!-- MONTO -->
+      <label>Monto</label>
+      <input type="number" [(ngModel)]="transaccionForm.monto" name="monto">
+
+      <!-- FECHA -->
+      <label>Fecha</label>
+      <input type="date" [(ngModel)]="transaccionForm.fecha" name="fecha">
+
+      <!-- TIPO -->
+      <label>Tipo</label>
+      <select [(ngModel)]="transaccionForm.tipo" name="tipo">
+        <option value="ingreso">Ingreso</option>
+        <option value="egreso">Egreso</option>
+      </select>
+
+      <div class="modal-buttons">
+        <button type="button" class="btn-primary" (click)="save()">Guardar</button>
+        <button type="button" class="btn-secondary" (click)="showModal=false">Cancelar</button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

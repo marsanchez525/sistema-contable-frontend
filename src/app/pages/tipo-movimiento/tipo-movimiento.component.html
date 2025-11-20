@@ -1,0 +1,44 @@
+<div class="container">
+
+  <h2>Tipos de Movimiento</h2>
+
+  <button class="btn-primary" (click)="openModal()">+ Nuevo Tipo</button>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let t of tipos">
+        <td>{{ t.id_tipo ?? t.id ?? '-' }}</td>
+        <td>{{ t.nombre ?? t.Nombre ?? '-' }}</td>
+        <td>
+          <button class="btn-edit" (click)="openModal(t)">Editar</button>
+          <button class="btn-delete" (click)="delete(t.id_tipo ?? t.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-card">
+    <h3>{{ tipoForm.id_tipo ? 'Editar Tipo' : 'Nuevo Tipo' }}</h3>
+
+    <form (ngSubmit)="save()">
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="tipoForm.nombre" name="nombre" required>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary">{{ tipoForm.id_tipo ? 'Actualizar' : 'Crear' }}</button>
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
