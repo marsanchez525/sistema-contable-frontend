@@ -1,7 +1,40 @@
 <div class="layout">
-  <app-sidebar></app-sidebar>
 
-  <div class="content">
+  <!-- Sidebar / menú -->
+  <aside class="sidebar">
+    <div class="logo">
+      Sistema Contable
+    </div>
+
+    <nav class="menu">
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Dashboard
+      </a>
+      <a routerLink="/clientes" routerLinkActive="active">Clientes</a>
+      <a routerLink="/proveedores" routerLinkActive="active">Proveedores</a>
+      <a routerLink="/cuentas-contables" routerLinkActive="active">Cuentas contables</a>
+      <a routerLink="/facturas" routerLinkActive="active">Facturas</a>
+      <a routerLink="/transacciones" routerLinkActive="active">Transacciones</a>
+      <a routerLink="/detalles-factura" routerLinkActive="active">Detalles Factura</a>
+      <a routerLink="/estados" routerLinkActive="active">Estados</a>
+      <a routerLink="/roles" routerLinkActive="active">Roles</a>
+      <a routerLink="/tipo-movimiento" routerLinkActive="active">Tipo Movimiento</a>
+      <a routerLink="/lineas-asiento" routerLinkActive="active">Lineas Asiento</a>
+      <a routerLink="/usuarios" routerLinkActive="active">Usuarios</a>
+      <a routerLink="/asientos-contables" routerLinkActive="active">Asientos Contables</a>
+
+
+      <!-- agrega los demás que quieras -->
+    </nav>
+
+    <button class="btn-logout" (click)="logout()">
+      Cerrar sesión
+    </button>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="content">
+    <!-- AQUÍ ES DONDE SE PINTA EL DASHBOARD / PÁGINAS -->
     <router-outlet></router-outlet>
-  </div>
+  </main>
 </div>

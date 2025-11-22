@@ -26,6 +26,8 @@
           <th>Fecha</th>
           <th>Total</th>
           <th>Estado</th>
+          <th>Estado DIAN</th>
+          <th>CUFE</th>
           <th class="text-right">Acciones</th>
         </tr>
       </thead>
@@ -35,7 +37,7 @@
           <td>{{ f.id_factura }}</td>
 
           <td>
-            {{ f.cliente?.Nombre1_Cliente || f.cliente?.nombre || 'Cliente ' + f.id_cliente }}
+            {{ f.cliente?.Nombre1_Cliente || f.cliente?.nombre || ('Cliente ' + f.id_cliente) }}
           </td>
 
           <td>
@@ -48,11 +50,35 @@
 
           <td>{{ f.estado }}</td>
 
-          <td class="text-right">
+          <!-- Estado DIAN -->
+          <td>
+            <span class="tag" [ngClass]="{
+              'tag-success': f.estado_dian === 'ACEPTADA',
+              'tag-warning': f.estado_dian === 'PENDIENTE',
+              'tag-danger': f.estado_dian === 'RECHAZADA'
+            }">
+              {{ f.estado_dian || 'Pendiente' }}
+            </span>
+          </td>
+
+          <td>
+            {{ f.cufe || '-' }}
+          </td>
+
+          <td class="actions text-right">
+
             <button class="btn-ghost" (click)="openModal(f)">Editar</button>
+
             <button class="btn-danger" (click)="deleteFactura(f.id_factura)">Eliminar</button>
+
+            <button class="btn-primary" (click)="enviarDian(f)">
+              {{ f.estado_dian ? 'Reenviar DIAN' : 'Enviar DIAN' }}
+            </button>
+
             <button class="btn-outline" (click)="exportPdf(f.id_factura)">PDF</button>
+
             <button class="btn-outline" (click)="exportExcel(f.id_factura)">Excel</button>
+
           </td>
         </tr>
       </tbody>
@@ -63,7 +89,6 @@
     No hay facturas registradas.
   </p>
 </div>
-
 
 
 <!-- ========================================================= -->
@@ -112,10 +137,10 @@
           <div class="form-group">
             <label>Fecha de emisión</label>
             <input 
-              type="date" 
-              [(ngModel)]="facturaForm.fecha_emision" 
-              name="fecha_emision" 
-              required 
+              type="date"
+              [(ngModel)]="facturaForm.fecha_emision"
+              name="fecha_emision"
+              required
             />
           </div>
 

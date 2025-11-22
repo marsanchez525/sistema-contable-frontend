@@ -1,52 +1,98 @@
-<h2>Líneas de Asiento</h2>
+<div class="container">
+  <h2>Líneas de Asiento</h2>
+  <p class="subtitle">
+    Registra el debe y haber por asiento contable.
+  </p>
 
-<button (click)="openModal()">Nueva Línea</button>
+  <button class="btn-primary" (click)="openModal()">
+    + Nueva línea
+  </button>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>ID Asiento</th>
-      <th>Cuenta</th>
-      <th>Debe</th>
-      <th>Haber</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
+  <table>
+    <thead>
+      <tr>
+        <th>ID Línea</th>
+        <th>ID Asiento</th>
+        <th>Cuenta</th>
+        <th>Debe</th>
+        <th>Haber</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
 
-  <tbody>
-    <tr *ngFor="let l of lineas">
-      <td>{{ l.id }}</td>
-      <td>{{ l.Id_Asiento }}</td>
-      <td>{{ l.Cuenta }}</td>
-      <td>{{ l.Debe }}</td>
-      <td>{{ l.Haber }}</td>
-      <td>
-        <button (click)="openModal(l)">Editar</button>
-        <button (click)="deleteLinea(l.id)">Eliminar</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+    <tbody>
+      <tr *ngFor="let l of lineas">
+        <td>{{ l.id_linea }}</td>
+        <td>{{ l.id_asiento }}</td>
+        <td>{{ l.id_cuenta }}</td>
+        <td class="monto debe">{{ l.debe | number:'1.2-2' }}</td>
+        <td class="monto haber">{{ l.haber | number:'1.2-2' }}</td>
+        <td>
+          <button class="btn-edit" (click)="openModal(l)">Editar</button>
+          <button class="btn-delete" (click)="delete(l.id_linea)">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="lineas.length === 0">
+        <td colspan="6" class="empty">
+          No hay líneas de asiento registradas.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <!-- MODAL -->
 <div class="modal" *ngIf="showModal">
   <div class="modal-content">
-    <h3>{{ lineaForm.id ? 'Editar Línea' : 'Nueva Línea' }}</h3>
+    <h3>{{ lineaForm.id_linea ? 'Editar línea de asiento' : 'Nueva línea de asiento' }}</h3>
 
-    <label>ID Asiento</label>
-    <input type="number" [(ngModel)]="lineaForm.Id_Asiento">
+    <form autocomplete="off">
+      <div class="form-group">
+        <label>ID Asiento</label>
+        <input
+          type="number"
+          [(ngModel)]="lineaForm.id_asiento"
+          name="id_asiento"
+          required
+        />
+      </div>
 
-    <label>Cuenta</label>
-    <input type="text" [(ngModel)]="lineaForm.Cuenta">
+      <div class="form-group">
+        <label>Cuenta contable</label>
+        <select [(ngModel)]="lineaForm.id_cuenta" name="id_cuenta" required>
+          <option [ngValue]="null">Seleccione cuenta...</option>
+          <option *ngFor="let c of cuentas" [ngValue]="c.id_cuenta">
+            {{ c.codigo }} - {{ c.nombre }}
+          </option>
+        </select>
+      </div>
 
-    <label>Debe</label>
-    <input type="number" [(ngModel)]="lineaForm.Debe">
+      <div class="form-group">
+        <label>Debe</label>
+        <input
+          type="number"
+          step="0.01"
+          [(ngModel)]="lineaForm.debe"
+          name="debe"
+        />
+      </div>
 
-    <label>Haber</label>
-    <input type="number" [(ngModel)]="lineaForm.Haber">
+      <div class="form-group">
+        <label>Haber</label>
+        <input
+          type="number"
+          step="0.01"
+          [(ngModel)]="lineaForm.haber"
+          name="haber"
+        />
+      </div>
 
-    <button (click)="saveLinea()">Guardar</button>
-    <button (click)="showModal = false">Cancelar</button>
+      <div class="modal-buttons">
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button type="button" class="btn-primary" (click)="save()">
+          {{ lineaForm.id_linea ? 'Guardar cambios' : 'Crear línea' }}
+        </button>
+      </div>
+    </form>
   </div>
 </div>

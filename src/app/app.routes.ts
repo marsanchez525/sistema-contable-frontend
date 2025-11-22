@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-
+import { LoginComponent } from './pages/login/login.component';
 import { LayoutComponent } from './layouts/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
@@ -14,11 +14,18 @@ import { TransaccionesComponent } from './pages/transacciones/transacciones.comp
 import { EstadosComponent } from './pages/estados/estados.component';
 import { FacturasComponent } from './pages/facturas/facturas.component';
 import { DetallesFacturaComponent } from './pages/detalles-factura/detalles-factura.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+
+  // 🔐 Login fuera del layout
+  { path: 'login', component: LoginComponent },
+
+  // 🌐 Todo lo demás protegido por el guard
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
@@ -35,9 +42,9 @@ export const routes: Routes = [
       { path: 'estados', component: EstadosComponent },
       { path: 'facturas', component: FacturasComponent },
       { path: 'detalles-factura', component: DetallesFacturaComponent },
-
-      // Wildcard DENTRO del layout
-      { path: '**', redirectTo: 'dashboard' }
     ]
-  }
+  },
+
+  // Comodín
+  { path: '**', redirectTo: 'login' }
 ];

@@ -1,52 +1,98 @@
-<h2>Asientos Contables</h2>
+<div class="container">
+  <h2>Asientos Contables</h2>
+  <p class="subtitle">
+    Administra los asientos contables del sistema (fecha, descripción y responsables).
+  </p>
 
-<button (click)="openModal()">Nuevo Asiento</button>
+  <button class="btn-primary" (click)="openModal()">
+    + Nuevo asiento
+  </button>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Fecha</th>
-      <th>Descripción</th>
-      <th>Debe</th>
-      <th>Haber</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Descripción</th>
+        <th>Creado por</th>
+        <th>Modificado por</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
 
-  <tbody>
-    <tr *ngFor="let a of asientos">
-      <td>{{ a.id }}</td>
-      <td>{{ a.Fecha_Asiento }}</td>
-      <td>{{ a.Descripcion_Asiento }}</td>
-      <td>{{ a.Debe }}</td>
-      <td>{{ a.Haber }}</td>
-      <td>
-        <button (click)="openModal(a)">Editar</button>
-        <button (click)="deleteAsiento(a.id)">Eliminar</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+    <tbody>
+      <tr *ngFor="let a of asientos">
+        <td>{{ a.id_asiento }}</td>
+        <td>{{ a.fecha | date:'yyyy-MM-dd' }}</td>
+        <td>{{ a.descripcion }}</td>
+        <td>{{ a.creado_por }}</td>
+        <td>{{ a.modificado_por }}</td>
+        <td>
+          <button class="btn-edit" (click)="openModal(a)">Editar</button>
+          <button class="btn-delete" (click)="delete(a.id_asiento)">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="asientos.length === 0">
+        <td colspan="6" class="empty">
+          No hay asientos registrados.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <!-- MODAL -->
 <div class="modal" *ngIf="showModal">
   <div class="modal-content">
-    <h3>{{ asientoForm.id ? 'Editar Asiento' : 'Nuevo Asiento' }}</h3>
+    <h3>{{ asientoForm.id_asiento ? 'Editar asiento contable' : 'Nuevo asiento contable' }}</h3>
 
-    <label>Fecha</label>
-    <input type="date" [(ngModel)]="asientoForm.Fecha_Asiento">
+    <form autocomplete="off">
+      <div class="form-group">
+        <label>Fecha</label>
+        <input
+          type="date"
+          [(ngModel)]="asientoForm.fecha"
+          name="fecha"
+          required
+        />
+      </div>
 
-    <label>Descripción</label>
-    <input type="text" [(ngModel)]="asientoForm.Descripcion_Asiento">
+      <div class="form-group form-full">
+        <label>Descripción</label>
+        <input
+          type="text"
+          [(ngModel)]="asientoForm.descripcion"
+          name="descripcion"
+          placeholder="Concepto general del asiento"
+        />
+      </div>
 
-    <label>Debe</label>
-    <input type="number" [(ngModel)]="asientoForm.Debe">
+      <div class="form-group">
+        <label>Creado por</label>
+        <select [(ngModel)]="asientoForm.creado_por" name="creado_por" required>
+          <option [ngValue]="null">Seleccione usuario...</option>
+          <option *ngFor="let u of usuarios" [ngValue]="u.id ?? u.id_usuario">
+            {{ u.nombre || u.name || ('Usuario ' + (u.id ?? u.id_usuario)) }}
+          </option>
+        </select>
+      </div>
 
-    <label>Haber</label>
-    <input type="number" [(ngModel)]="asientoForm.Haber">
+      <div class="form-group">
+        <label>Modificado por</label>
+        <select [(ngModel)]="asientoForm.modificado_por" name="modificado_por">
+          <option [ngValue]="null">Sin modificar</option>
+          <option *ngFor="let u of usuarios" [ngValue]="u.id ?? u.id_usuario">
+            {{ u.nombre || u.name || ('Usuario ' + (u.id ?? u.id_usuario)) }}
+          </option>
+        </select>
+      </div>
 
-    <button (click)="saveAsiento()">Guardar</button>
-    <button (click)="showModal = false">Cancelar</button>
+      <div class="modal-buttons">
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button type="button" class="btn-primary" (click)="save()">
+          {{ asientoForm.id_asiento ? 'Guardar cambios' : 'Crear asiento' }}
+        </button>
+      </div>
+    </form>
   </div>
 </div>

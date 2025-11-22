@@ -42,79 +42,52 @@ export class FacturasComponent implements OnInit {
     this.loadFacturas();
   }
 
+  // 🔹 CARGA CLIENTES Y PROVEEDORES
   loadClientesYProveedores(): void {
-    // CLIENTES
     this.clientesService.getAll().subscribe({
       next: (resp: any) => {
-        console.log('GET /clientes =>', resp);
-        if (Array.isArray(resp)) {
-          this.clientes = resp;
-        } else if (resp.data && Array.isArray(resp.data)) {
-          this.clientes = resp.data;
-        } else {
-          this.clientes = [];
-        }
+        this.clientes = Array.isArray(resp) ? resp : (resp.data || []);
       },
-      error: (err) => {
-        console.error('Error cargando clientes para facturas', err);
-      }
+      error: (err) => console.error('Error cargando clientes', err)
     });
 
-    // PROVEEDORES
     this.proveedoresService.getAll().subscribe({
       next: (resp: any) => {
-        console.log('GET /proveedores =>', resp);
-        if (Array.isArray(resp)) {
-          this.proveedores = resp;
-        } else if (resp.data && Array.isArray(resp.data)) {
-          this.proveedores = resp.data;
-        } else {
-          this.proveedores = [];
-        }
+        this.proveedores = Array.isArray(resp) ? resp : (resp.data || []);
       },
-      error: (err) => {
-        console.error('Error cargando proveedores para facturas', err);
-      }
+      error: (err) => console.error('Error cargando proveedores', err)
     });
   }
 
+  // 🔹 CARGAR FACTURAS
   loadFacturas(): void {
     this.loading = true;
     this.errorMsg = '';
 
     this.facturasService.getAll().subscribe({
       next: (resp) => {
-        console.log('GET /facturas =>', resp);
-
-        if (Array.isArray(resp)) {
-          this.facturas = resp;
-        } else if (resp.data && Array.isArray(resp.data)) {
-          this.facturas = resp.data;
-        } else if (resp.facturas && Array.isArray(resp.facturas)) {
-          this.facturas = resp.facturas;
-        } else {
-          this.facturas = [];
-        }
-
+        if (Array.isArray(resp)) this.facturas = resp;
+        else if (resp.data) this.facturas = resp.data;
+        else if (resp.facturas) this.facturas = resp.facturas;
+        else this.facturas = [];
         this.loading = false;
       },
       error: (err) => {
         console.error('Error cargando facturas', err);
-        this.errorMsg = `Error cargando facturas: ${err.status} ${err.statusText || ''}`;
+        this.errorMsg = `Error cargando facturas: ${err.status}`;
         this.loading = false;
       }
     });
   }
 
+  // 🔹 ABRIR MODAL
   openModal(factura: any = null): void {
     if (factura) {
       this.facturaForm = {
         id_factura: factura.id_factura ?? null,
         id_cliente: factura.id_cliente ?? null,
         id_proveedor: factura.id_proveedor ?? null,
-        fecha_emision: factura.fecha_emision
-          ? factura.fecha_emision.substring(0, 10)
-          : '',
+        fecha_emision: factura.fecha_emision?.substring(0, 10) || '',
         total: Number(factura.total ?? 0),
         estado: factura.estado ?? ''
       };
@@ -140,9 +113,8 @@ export class FacturasComponent implements OnInit {
     };
   }
 
+  // 🔹 GUARDAR FACTURA
   saveFactura(): void {
-    this.errorMsg = '';
-
     const payload = {
       id_cliente: this.facturaForm.id_cliente,
       id_proveedor: this.facturaForm.id_proveedor,
@@ -151,62 +123,66 @@ export class FacturasComponent implements OnInit {
       estado: this.facturaForm.estado
     };
 
-    console.log('Guardando factura =>', payload);
+    this.errorMsg = '';
 
     if (this.facturaForm.id_factura) {
+      // UPDATE
       this.facturasService.update(this.facturaForm.id_factura, payload).subscribe({
-        next: (resp) => {
-          console.log('PUT /facturas OK', resp);
+        next: () => {
           this.loadFacturas();
           this.closeModal();
         },
         error: (err) => {
-          console.error('Error actualizando factura', err);
-          this.errorMsg = `Error actualizando factura: ${err.status} ${err.statusText || ''}`;
+          console.error('Error actualizando', err);
+          this.errorMsg = `Error actualizando factura: ${err.status}`;
         }
       });
     } else {
+      // CREATE
       this.facturasService.create(payload).subscribe({
-        next: (resp) => {
-          console.log('POST /facturas OK', resp);
+        next: () => {
           this.loadFacturas();
           this.closeModal();
         },
         error: (err) => {
-          console.error('Error creando factura', err);
-          console.log('Detalle Laravel:', err.error);
-          if (err.status === 422 && err.error && err.error.errors) {
-            const mensajes: string[] = [];
-            Object.keys(err.error.errors).forEach(campo => {
-              err.error.errors[campo].forEach((m: string) => mensajes.push(m));
-            });
-            this.errorMsg = mensajes.join(' | ');
-          } else {
-            this.errorMsg = `Error creando factura: ${err.status} ${err.statusText || ''}`;
-          }
+          console.error('Error creando', err);
+          this.errorMsg = `Error creando factura: ${err.status}`;
         }
       });
     }
   }
 
+  // 🔹 ELIMINAR FACTURA
   deleteFactura(id_factura: number): void {
-    if (!confirm('¿Eliminar esta factura?')) return;
-
-    this.errorMsg = '';
+    if (!confirm('¿Seguro que quieres eliminar esta factura?')) return;
 
     this.facturasService.delete(id_factura).subscribe({
-      next: (resp) => {
-        console.log('DELETE /facturas OK', resp);
-        this.loadFacturas();
-      },
+      next: () => this.loadFacturas(),
       error: (err) => {
         console.error('Error eliminando factura', err);
-        this.errorMsg = `Error eliminando factura: ${err.status} ${err.statusText || ''}`;
+        this.errorMsg = `Error eliminando factura: ${err.status}`;
       }
     });
   }
 
-  // Ganchos para exportar (cuando tengas endpoints de PDF/Excel)
+  // ⭐⭐⭐ NUEVO: ENVIAR A DIAN (SIMULADO)
+  enviarDian(factura: any): void {
+    if (!confirm('¿Enviar esta factura a la DIAN (modo demo)?')) return;
+
+    this.facturasService.enviarDian(factura.id_factura).subscribe({
+      next: (resp) => {
+        console.log('Respuesta DIAN =>', resp);
+        alert('Factura enviada a DIAN: ' + resp.resultado.estado);
+        this.loadFacturas();
+      },
+      error: (err) => {
+        console.error('Error enviando a DIAN', err);
+        alert('Error enviando factura a la DIAN');
+      }
+    });
+  }
+
+  // EXPORTACIONES
   exportPdf(id_factura: number): void {
     window.open(`http://127.0.0.1:8000/api/facturas/${id_factura}/pdf`, '_blank');
   }
